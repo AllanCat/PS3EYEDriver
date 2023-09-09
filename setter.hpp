@@ -5,7 +5,7 @@
 
 namespace ps3eye::detail {
 
-template<typename t, t min_ = std::numeric_limits<t>::min(), t max_ = std::numeric_limits<t>::max()>
+template<typename t, t min_ = (std::numeric_limits<t>::min)(), t max_ = (std::numeric_limits<t>::max)()>
 struct val_
 {
     static constexpr int min = min_;
