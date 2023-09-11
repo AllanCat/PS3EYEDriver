@@ -49,7 +49,7 @@ static void run_camera(ps3eye::resolution res, int fps)
     auto [ w, h ] = camera->size();
 
     char title[256];
-    sprintf(title, "%dx%d@%dHz\n", w, h, camera->framerate());
+    sprintf_s(title, 256, "%dx%d@%dHz\n", w, h, camera->framerate());
 
     SDL_Window* window = SDL_CreateWindow(title,
                                           SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
