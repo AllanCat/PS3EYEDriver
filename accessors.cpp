@@ -10,20 +10,29 @@ namespace ps3eye {
 void camera::set_auto_gain(bool val)
 {
     auto_gain_ = val;
-    constexpr int mask = 1 << 0 /* AEC */ | 1 << 2 /* AGC */;
     if (val)
     {
-        sccb_reg_write(0x13, sccb_reg_read(0x13) | mask);
+        sccb_reg_write(0x13, sccb_reg_read(0x13) | 0x04);
         sccb_reg_write(0x64, sccb_reg_read(0x64) | 0x03);
     }
     else
     {
-        sccb_reg_write(0x13, sccb_reg_read(0x13) & ~mask);
+		sccb_reg_write(0x13, sccb_reg_read(0x13) & ~0x04);
         sccb_reg_write(0x64, sccb_reg_read(0x64) & ~0x03);
-
-        set_gain(gain_);
-        set_exposure(exposure_);
     }
+}
+
+void camera::set_auto_hue(bool val)
+{
+	auto_hue_ = val;
+	if (val)
+	{	
+		sccb_reg_write(0x63, sccb_reg_read(0x63) | 0x40);
+	}
+	else
+	{
+		sccb_reg_write(0x63, sccb_reg_read(0x63) & ~0x40);
+	}
 }
 
 void camera::set_awb(bool val)
@@ -33,17 +42,26 @@ void camera::set_awb(bool val)
     if (val)
     {
         sccb_reg_write(0x13, sccb_reg_read(0x13) | 0x02);
-        sccb_reg_write(0x63, sccb_reg_read(0x63) | 0xc0);
+		sccb_reg_write(0x63, sccb_reg_read(0x63) | 0x80);
     }
     else
     {
         sccb_reg_write(0x13, sccb_reg_read(0x13) & ~0x02);
-        sccb_reg_write(0x63, sccb_reg_read(0x63) & ~0xc0);
-
-        set_red_balance(red_balance_);
-        set_green_balance(green_balance_);
-        set_blue_balance(blue_balance_);
+        sccb_reg_write(0x63, sccb_reg_read(0x63) & ~0x80);
     }
+}
+
+void camera::set_aec(bool val)
+{
+	aec_ = val;
+	if (val)
+	{
+		sccb_reg_write(0x13, sccb_reg_read(0x13) | 0x01);
+	}
+	else
+	{
+		sccb_reg_write(0x13, sccb_reg_read(0x13) & ~0x01);
+	}
 }
 
 void camera::set_framerate(int val)

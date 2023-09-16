@@ -52,8 +52,12 @@ struct camera
     // Controls
     constexpr bool auto_gain() const { return auto_gain_; }
     void set_auto_gain(bool val);
+	constexpr bool auto_hue() const { return auto_hue_; }
+	void set_auto_hue(bool val);
     constexpr bool awb() const { return awb_; }
     void set_awb(bool val);
+	constexpr bool aec() const { return aec_; }
+	void set_aec(bool val);
     constexpr uint8_t gain() const { return gain_; }
     void set_gain(int val);
     constexpr uint8_t exposure() const { return exposure_; }
@@ -143,7 +147,7 @@ private:
     val<0, 63> gain_ = 20;
     val<0, 63> sharpness_ = 0;
     val<> exposure_ = 255;
-    val<0, 128> hue_ = 64;
+    val<> hue_ = 165;
     val<> brightness_ = 20;
     val<> contrast_ = 0;
     val<> blue_balance_ = 128;
@@ -152,7 +156,9 @@ private:
     val<> saturation_ = 0;
 
     bool auto_gain_ = false;
+	bool auto_hue_ = true;
     bool awb_ = true;
+	bool aec_ = true;
     bool flip_h_ = false;
     bool flip_v_ = false;
     bool test_pattern_ = false;

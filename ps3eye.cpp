@@ -304,7 +304,9 @@ bool camera::start()
     set_hue(hue_);
     set_saturation(saturation_);
     set_awb(awb_);
-    set_auto_gain(auto_gain_);
+	set_aec(aec_);
+	set_auto_gain(auto_gain_);
+	set_auto_hue(auto_hue_);
     set_gain(gain_);
     set_exposure(exposure_);
     set_brightness(brightness_);
