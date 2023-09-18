@@ -12,8 +12,8 @@ void camera::set_auto_gain(bool val)
     auto_gain_ = val;
     if (val)
     {
-        sccb_reg_write(0x13, sccb_reg_read(0x13) | 0x04);
-        sccb_reg_write(0x64, sccb_reg_read(0x64) | 0x03);
+        sccb_reg_write(0x13, sccb_reg_read(0x13) | 0x04); // AGC enable
+        sccb_reg_write(0x64, sccb_reg_read(0x64) | 0x03); // Gamma function ON/OFF selection
     }
     else
     {
@@ -22,32 +22,19 @@ void camera::set_auto_gain(bool val)
     }
 }
 
-void camera::set_auto_hue(bool val)
-{
-	auto_hue_ = val;
-	if (val)
-	{	
-		sccb_reg_write(0x63, sccb_reg_read(0x63) | 0x40);
-	}
-	else
-	{
-		sccb_reg_write(0x63, sccb_reg_read(0x63) & ~0x40);
-	}
-}
-
 void camera::set_awb(bool val)
 {
     awb_ = val;
 
     if (val)
     {
-        sccb_reg_write(0x13, sccb_reg_read(0x13) | 0x02);
-		sccb_reg_write(0x63, sccb_reg_read(0x63) | 0x80);
+        sccb_reg_write(0x13, sccb_reg_read(0x13) | 0x02); // AWB enable
+		sccb_reg_write(0x63, sccb_reg_read(0x63) | 0xC0); // 4: AWB calculate enable, 8: AWB gain enable
     }
     else
     {
         sccb_reg_write(0x13, sccb_reg_read(0x13) & ~0x02);
-        sccb_reg_write(0x63, sccb_reg_read(0x63) & ~0x80);
+		sccb_reg_write(0x63, sccb_reg_read(0x63) & ~0xC0);
     }
 }
 
@@ -56,7 +43,7 @@ void camera::set_aec(bool val)
 	aec_ = val;
 	if (val)
 	{
-		sccb_reg_write(0x13, sccb_reg_read(0x13) | 0x01);
+		sccb_reg_write(0x13, sccb_reg_read(0x13) | 0x01); // AEC enable
 	}
 	else
 	{
@@ -91,8 +78,8 @@ void camera::set_exposure(int val)
 void camera::set_sharpness(int val)
 {
     sharpness_ = val;
-    sccb_reg_write(0x91, sharpness_); // vga noise
-    sccb_reg_write(0x8E, sharpness_); // qvga noise
+    sccb_reg_write(0x91, sharpness_); // vga noise / Auto De-noise threshold
+    sccb_reg_write(0x8E, sharpness_); // qvga noise / De-noise threshold
 }
 
 void camera::set_contrast(int val)
@@ -110,7 +97,23 @@ void camera::set_brightness(int val)
 void camera::set_hue(int val)
 {
     hue_ = val;
-    sccb_reg_write(0x01, (uint8_t)hue_);
+
+	// 0x01 is AWB blue channel, not hue.
+	//sccb_reg_write(0x01, (uint8_t)hue_);
+
+	val -= 90; // exact val ranges from -90 to 90
+	uint16_t huesin = (uint8_t)(sin(val) * 0x80);
+	uint16_t huecos = (uint8_t)(cos(val) * 0x80);
+
+	if (huesin < 0) {
+		sccb_reg_write(0xAB, sccb_reg_read(0xAB) | 0x2); // [1:0] Hue sign bit
+		huesin = -huesin;
+	}
+	else {
+		sccb_reg_write(0xAB, sccb_reg_read(0xAB) & ~0x2);
+	}
+	sccb_reg_write(0xA9, (uint8_t)huecos);
+	sccb_reg_write(0xAA, (uint8_t)huesin);
 }
 
 void camera::set_red_balance(int val)
