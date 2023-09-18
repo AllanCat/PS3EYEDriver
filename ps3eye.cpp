@@ -120,7 +120,7 @@ static const uint8_t ov772x_reg_initdata[][2] = {
     { 0x15, 0x00 },
     { 0x63, 0xAA },
     // AWB 
-    { 0x64, 0x8F }, // AGC[0-1] AEC?[2] Sharpness[3]
+    { 0x64, 0xDF }, // W/B defect auto correction[0-1] Gamma[2] Interpolation[3]
     { 0x66, 0x00 },
     { 0x67, 0x02 },
     { 0x17, 0x26 },
@@ -151,7 +151,8 @@ static const uint8_t ov772x_reg_initdata[][2] = {
     { 0x0D, 0x41 },
 
     { 0x8E, 0x00 },
-    // De-noise threshold - jfrancois 0x00 - orig 0x04
+	// De-noise threshold - jfrancois 0x00 - orig 0x04
+	{ 0xAC, 0xBF },
 };
 
 static const uint8_t bridge_start_vga[][2] = {
