@@ -29,12 +29,14 @@ void camera::set_awb(bool val)
     if (val)
     {
         sccb_reg_write(0x13, sccb_reg_read(0x13) | 0x02); // AWB enable
-		sccb_reg_write(0x63, sccb_reg_read(0x63) | 0xC0); // 4: AWB calculate enable, 8: AWB gain enable
+		sccb_reg_write(0x63, sccb_reg_read(0x63) | 0x40); // AWB calculate enable
+		sccb_reg_write(0x63, sccb_reg_read(0x63) & ~0x80); // AWB gain enable
     }
     else
     {
         sccb_reg_write(0x13, sccb_reg_read(0x13) & ~0x02);
-		sccb_reg_write(0x63, sccb_reg_read(0x63) & ~0xC0);
+		sccb_reg_write(0x63, sccb_reg_read(0x63) & ~0x40);
+		sccb_reg_write(0x63, sccb_reg_read(0x63) | 0x80);
     }
 }
 
@@ -119,19 +121,22 @@ void camera::set_hue(int val)
 void camera::set_red_balance(int val)
 {
     red_balance_ = val;
-    sccb_reg_write(0x43, red_balance_);
+	sccb_reg_write(0x02, red_balance_); // AWB Red Channel Gain
+    //sccb_reg_write(0x43, red_balance_); // BLC Red Channel Target Value
 }
 
 void camera::set_blue_balance(int val)
 {
     blue_balance_ = val;
-    sccb_reg_write(0x42, blue_balance_);
+	sccb_reg_write(0x01, blue_balance_); // AWB Blue Channel Gain
+    //sccb_reg_write(0x42, blue_balance_); // BLC Blue Channel Target Value
 }
 
 void camera::set_green_balance(int val)
 {
     green_balance_ = val;
-    sccb_reg_write(0x44, green_balance_);
+	sccb_reg_write(0x03, green_balance_); // AWB Green Channel Gain
+    //sccb_reg_write(0x44, green_balance_); // BLC Gb Channel Target Value
 }
 
 void camera::set_flip_status(bool horizontal, bool vertical)
