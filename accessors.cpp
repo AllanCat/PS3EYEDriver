@@ -30,13 +30,11 @@ void camera::set_awb(bool val)
     {
         sccb_reg_write(0x13, sccb_reg_read(0x13) | 0x02); // AWB enable
 		sccb_reg_write(0x63, sccb_reg_read(0x63) | 0x40); // AWB calculate enable
-		sccb_reg_write(0x63, sccb_reg_read(0x63) & ~0x80); // AWB gain enable
     }
     else
     {
         sccb_reg_write(0x13, sccb_reg_read(0x13) & ~0x02);
 		sccb_reg_write(0x63, sccb_reg_read(0x63) & ~0x40);
-		sccb_reg_write(0x63, sccb_reg_read(0x63) | 0x80);
     }
 }
 
