@@ -710,4 +710,14 @@ const char* camera::error_string() const
     return libusb_strerror((libusb_error)error_code_);
 }
 
+void micStarted()
+{
+	ps3eye::detail::usb_manager::instance().camera_started();
+}
+
+void micStopped()
+{
+	ps3eye::detail::usb_manager::instance().camera_stopped();
+}
+
 } // namespace ps3eye::detail

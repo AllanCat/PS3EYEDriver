@@ -137,45 +137,45 @@ static void run_camera(ps3eye::resolution res, int fps)
     SDL_DestroyWindow(window);
 }
 
-int main(int argc, char** argv)
-{
-    ps3eye::resolution res = ps3eye::res_VGA;
-    int fps = 60;
-
-    for (int i = 1; i < argc; i++)
-    {
-        bool good_arg = false;
-
-        if (std::string(argv[i]) == "--qvga")
-        {
-            res = ps3eye::res_QVGA;
-            good_arg = true;
-        }
-        if ((std::string(argv[i]) == "--fps") && argc > i)
-        {
-            std::istringstream new_fps_ss(argv[i + 1]);
-            if (new_fps_ss >> fps)
-            {
-                good_arg = true;
-            }
-            i++;
-        }
-
-        if (!good_arg)
-        {
-            std::cerr << "Usage: " << argv[0]
-                      << " [--fps num] [--qvga]" << std::endl;
-            return 64 /* EX_USAGE */;
-        }
-    }
-
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        printf("Failed to initialize SDL: %s\n", SDL_GetError());
-        return EXIT_FAILURE;
-    }
-
-    run_camera(res, fps);
-
-    return EXIT_SUCCESS;
-}
+//int main(int argc, char** argv)
+//{
+//    ps3eye::resolution res = ps3eye::res_VGA;
+//    int fps = 60;
+//
+//    for (int i = 1; i < argc; i++)
+//    {
+//        bool good_arg = false;
+//
+//        if (std::string(argv[i]) == "--qvga")
+//        {
+//            res = ps3eye::res_QVGA;
+//            good_arg = true;
+//        }
+//        if ((std::string(argv[i]) == "--fps") && argc > i)
+//        {
+//            std::istringstream new_fps_ss(argv[i + 1]);
+//            if (new_fps_ss >> fps)
+//            {
+//                good_arg = true;
+//            }
+//            i++;
+//        }
+//
+//        if (!good_arg)
+//        {
+//            std::cerr << "Usage: " << argv[0]
+//                      << " [--fps num] [--qvga]" << std::endl;
+//            return 64 /* EX_USAGE */;
+//        }
+//    }
+//
+//    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+//    {
+//        printf("Failed to initialize SDL: %s\n", SDL_GetError());
+//        return EXIT_FAILURE;
+//    }
+//
+//    run_camera(res, fps);
+//
+//    return EXIT_SUCCESS;
+//}
